@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>MySQLObjectListController</members>
+        <members>MySQLObjectListControllerTest</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>mySQLHome</members>
+        <members>fieldPage</members>
+        <name>LightningComponentBundle</name>
+    </types>
+    <types>
+        <members>WorkRow_API</members>
+        <name>RemoteSiteSetting</name>
+    </types>
+    <types>
+        <members>mySQL_Config</members>
+        <name>CustomApplication</name>
+    </types>
+    <types>
+        <members>Home</members>
+        <name>CustomTab</name>
+    </types>
+    <types>
+        <members>mySQL_Config_UtilityBar</members>
+        <name>FlexiPage</name>
+    </types>
+    <types>
+        <members>mysql</members>
+        <name>ContentAsset</name>
+    </types>
+    <version>63.0</version>
+</Package>

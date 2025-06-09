@@ -1,0 +1,186 @@
+<template>
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+    </template>
+    <div class="slds-box slds-theme_default slds-m-vertical_medium">
+        <div class="slds-grid slds-align-center slds-p-vertical_small">
+            <lightning-icon icon-name="utility:back" alternative-text="Back" size="xx-small" title="Go Back"
+                onclick={handleBackClick} class="slds-m-right_small">
+            </lightning-icon>
+            <p class="slds-text-heading_small">{objName} Field</p>
+        </div>
+        <h1 class="slds-text-heading_large slds-m-bottom_small"> {label}</h1>
+
+        <div class="slds-box slds-theme_default slds-m-vertical_medium">
+            <div class="slds-grid slds-justify-center slds-m-bottom_small">
+                <lightning-button label="Edit" onclick={editFieldModal} variant="neutral" class="slds-button_small"
+                    style="margin: auto">
+                </lightning-button>
+            </div>
+            <p class="slds-text-heading_small slds-m-bottom_medium">Field Information</p>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-size_1-of-2">
+                    <p><strong>Field Label</strong></p>
+                    <p>{label} ({apiName})</p>
+                </div>
+                <div class="slds-size_1-of-2">
+                    <p><strong>Field Id</strong></p>
+                    <p>{recordId}</p>
+                </div>
+                <div class="slds-size_1-of-2">
+                    <p><strong>Data Type</strong></p>
+                    <p>{fledType} ({textLength})</p>
+                </div>
+                <div class="slds-size_1-of-2">
+                    <p><strong>Description</strong></p>
+                    <p></p>
+                </div>
+                <div class="slds-size_1-of-2">
+                    <p><strong>Data Owner</strong></p>
+                    <p></p>
+                </div>
+                <div class="slds-size_1-of-2">
+                    <p><strong>Field Usage</strong></p>
+                    <p></p>
+                </div>
+                <div class="slds-size_1-of-2">
+                    <p><strong>Data Sensitivity Level</strong></p>
+                    <p></p>
+                </div>
+                <div class="slds-size_1-of-2">
+                    <p><strong>Compliance Categorization</strong></p>
+                    <p></p>
+                </div>
+            </div>
+        </div>
+        <template if:true={pickListSection}>
+            <div class="slds-box slds-theme_default">
+                <div class="slds-grid slds-grid_align-spread slds-m-bottom_x-small">
+                    <p class="slds-text-heading_small">Picklist values</p>
+                    <lightning-button label="New" variant="neutral" onclick={openModal}></lightning-button>
+
+                </div>
+                <div class="slds-box slds-theme_default">
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <!-- <th scope="col">
+                                        <div class="slds-truncate">Serial No.</div>
+                                    </th> -->
+                                <th scope="col">
+                                    <div class="slds-truncate">Action</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate">Values</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate">API Name</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate">Default</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate">Chart Colors</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate">Modified By</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={picklistValues} for:item="pickVal">
+                                <tr key={pickVal.id}>
+                                    <!-- <td>{pickVal.serialNo}</td> -->
+                                    <td>
+                                        <a href="javascript:void(0)" onclick={handleEdit} data-id={pickVal.id}
+                                            data-label={pickVal.label}>Edit</a> |
+                                        <a href="javascript:void(0)" onclick={handleDelete}
+                                            data-id={pickVal.id}>Delete</a>
+                                    </td>
+                                    <td>{pickVal.label}</td>
+                                    <td>{pickVal.id}</td>
+                                    <td>
+                                        <lightning-input type="checkbox" disabled>
+                                        </lightning-input>
+                                    </td>
+                                    <td>Assigned dynamically</td>
+                                    <td>{pickVal.updated_at}</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+                <template if:true={isModalOpen}>
+                    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container">
+                            <!-- Header -->
+                            <header class="slds-modal__header">
+                                <h2 class="slds-text-heading_medium">{modalType} Picklist</h2>
+                            </header>
+
+                            <!-- Body -->
+                            <div class="slds-modal__content slds-p-around_medium">
+                                <p>Add one or more picklist values below. Each value should be on its own line and
+                                    it is
+                                    used for
+                                    both a value's label and API name.</p>
+                                <br/>
+                                <p>If a value matches an inactive value's API name, that value is reactivated with
+                                    its
+                                    previous
+                                    label.</p>
+                                <p>If a value matches an inactive value's label but not the API name, a new value is
+                                    created.</p>
+                                <lightning-input label="Label" type="text" data-id="labelName" value={picklistname}
+                                    onchange={handleLabelChange} required>
+                                </lightning-input>
+                                <lightning-input label="API Name" type="text" value={pickApiName} data-id="objName"
+                                    required>
+                                </lightning-input>
+                            </div>
+
+                            <!-- Footer -->
+                            <footer class="slds-modal__footer">
+                                <lightning-button variant="neutral" label="Cancel" onclick={closeModal}
+                                    class="slds-m-right_small">
+                                </lightning-button>
+                                <lightning-button variant="brand" label="Save" onclick={saveValues}>
+                                </lightning-button>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </template>
+            </div>
+        </template>
+        <template if:true={isEditingField}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+        
+                    <!-- Modal Header -->
+                    <header class="slds-modal__header">
+                        <lightning-button-icon icon-name="utility:close" onclick={closeEidtField} class="slds-modal__close"
+                            alternative-text="close">
+                        </lightning-button-icon>
+                        <h2 class="slds-modal__title">Edit {label} Field</h2>
+                    </header>
+        
+                    <!-- Modal Body -->
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-input type="text" label="Data Type" value={fledType} disabled></lightning-input>
+                        <lightning-input type="text" label="Length" value={textLength} data-id="textLength"></lightning-input>
+                    </div>
+        
+                    <!-- Modal Footer -->
+                    <footer class="slds-modal__footer">
+                        <lightning-button label="Cancel" onclick={closeEidtField}></lightning-button>
+                        <lightning-button label="Save" variant="brand" onclick={handleEditSave}>
+                        </lightning-button>
+                    </footer>
+        
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </div>
+</template>
