@@ -3,6 +3,7 @@ import getObjects from '@salesforce/apex/MySQLObjectListController.fetchWorkRowO
 import saveObject from '@salesforce/apex/MySQLObjectListController.saveObject';
 import getFields from '@salesforce/apex/MySQLObjectListController.fetchWorkRowField';
 import saveField from '@salesforce/apex/MySQLObjectListController.saveField';
+import getUserDetail from '@salesforce/apex/MySQLObjectListController.fetchUserDetail';
 import { NavigationMixin } from 'lightning/navigation';
 import { refreshApex } from '@salesforce/apex';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
@@ -36,6 +37,8 @@ export default class MySQLHome extends NavigationMixin(LightningElement) {
     textLength;
     searchTerm = '';  
     timestamp = ''; 
+    isUserModalOpen;
+    userList = [];
 
 
     @wire(getObjects)
@@ -324,5 +327,22 @@ export default class MySQLHome extends NavigationMixin(LightningElement) {
         }));
     }
 
+    openUserListModal(){
+        this.isUserModalOpen = true;
+        this.handleUserDetails();
+    }
+    
+    closeUserModal(){
+        this.isUserModalOpen = false;
+    }
 
+    handleUserDetails(){
+        getUserDetail().then((data) => {
+                console.log('Users:',data);
+                this.userList = data;
+            })
+            .catch((error) => {
+                console.error('Error received from Apex:', error);
+            });
+    }
 }

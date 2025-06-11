@@ -174,4 +174,34 @@ public class MySQLObjectListControllerTest {
         Test.stopTest();
         System.assert(result.contains('Error: Failed to parse error response'), 'Expected parsing error message');
     }
+    
+    @isTest
+    static void testFetchWorkRowUser_Success() {
+        Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator(200, '{"message": "Success", "data": [{"id": "1", "name": "Test name", "email": "test@gmail.com"}]}'));
+        Test.startTest();
+        List<MySQLObjectListController.WorkRowUsers> result = MySQLObjectListController.fetchUserDetail();
+        Test.stopTest();
+        System.assertEquals(1, result.size(), 'Expected 1 picklist value');
+        System.assertEquals('1', result[0].id, 'Expected picklist option ID to be 1');
+    }
+
+    @isTest
+    static void testFetchWorkRowUser_Failure() {
+        Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator(400, '{"message": "Field not found", "data": []}'));
+        Test.startTest();
+        try {
+            MySQLObjectListController.fetchUserDetail();
+            System.assert(false, 'Expected an exception due to failed API response');
+        } catch (AuraHandledException e) {}
+        Test.stopTest();
+    }
+
+    @isTest
+    static void testFetchWorkRowUser_EmptyResponse() {
+        Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator(200, '{"message": "Success", "data": []}'));
+        Test.startTest();
+        List<MySQLObjectListController.WorkRowUsers> result = MySQLObjectListController.fetchUserDetail();
+        Test.stopTest();
+        System.assertEquals(0, result.size(), 'Expected an empty list of picklist values');
+    }
 }

@@ -24,7 +24,7 @@
                         </lightning-input>
                     </div>
                 </div>
-                <lightning-button label="Schema Builder" class="slds-m-right_x-small"></lightning-button>
+                <lightning-button label="Users" class="slds-m-right_x-small" onclick={openUserListModal}></lightning-button>
                 <lightning-button-menu alternative-text="Show menu" label="Create" icon-position="right">
                     <lightning-menu-item label="Custom Object" onclick={handleCreateObject}></lightning-menu-item>
                     <lightning-menu-item label="Custom Metadata"></lightning-menu-item>
@@ -46,28 +46,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- <template for:each={objects} for:item="obj">
-                        <tr key={obj.recordId}>
-                            <td>
-                                <a href="javascript:void(0);" class="clickable-label" onclick={handleLabelClick}
-                                    data-label={obj.label} data-api_name={obj.api_name}>
-                                    {obj.label}
-                                </a>
-                            </td>
-                            <td>{obj.api_name}</td>
-                            <td>
-                                <lightning-formatted-date-time value={timestamp} year="2-digit" month="short"
-                                    day="2-digit" hour="numeric" minute="numeric">
-                                </lightning-formatted-date-time>
-                            </td>
-                            <td>
-                                <lightning-button-menu alternative-text="Show menu">
-                                    <lightning-menu-item value="MenuItemOne" label="Edit"></lightning-menu-item>
-                                    <lightning-menu-item value="MenuItemTwo" label="Delete"></lightning-menu-item>
-                                </lightning-button-menu>
-                            </td>
-                        </tr>
-                    </template> -->
                     <template for:each={filteredObjects} for:item="obj">
                         <tr key={obj.recordId}>
                             <td>
@@ -123,6 +101,51 @@
                 </section>
                 <div class="slds-backdrop slds-backdrop_open"></div>
             </template>
+            <template if:true={isUserModalOpen}>
+                <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+
+                        <!-- Modal Header -->
+                        <header class="slds-modal__header">
+                            <lightning-button-icon icon-name="utility:close" onclick={closeUserModal}
+                                class="slds-modal__close" alternative-text="close">
+                            </lightning-button-icon>
+                            <h2 class="slds-modal__title">Users List</h2>
+                        </header>
+
+                        <!-- Modal Body -->
+                        <div class="slds-modal__content slds-p-around_medium">
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered"
+                                aria-labelledby="element-with-table-label other-element-with-table-label">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>User Name</th>
+                                        <th>Email</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={userList} for:item="user">
+                                        <tr key={user.Id}>
+                                            <td> {user.id} </td>
+                                            <td>{user.name}</td>
+                                            <td>{user.email}</td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Modal Footer -->
+                        <!-- <footer class="slds-modal__footer">
+                            <lightning-button label="Cancel" onclick={closeUserModal} style="padding: 0px 7px 0px 0px;"></lightning-button>
+                            <lightning-button label="Save" variant="brand" onclick={handleSaveField}></lightning-button>
+                        </footer> -->
+
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
         </lightning-card>
     </template>
 
@@ -172,10 +195,6 @@
                             </th>
                             <th>
                                 <div class="slds-truncate slds-text-title_caps" title="DATA TYPE">DATA TYPE</div>
-                            </th>
-                            <th>
-                                <div class="slds-truncate slds-text-title_caps" title="CONTROLLING FIELD">CONTROLLING
-                                    FIELD</div>
                             </th>
                             <th></th>
                         </tr>
@@ -239,6 +258,7 @@
                 </section>
                 <div class="slds-backdrop slds-backdrop_open"></div>
             </template>
+            
         </lightning-card>
     </template>
 

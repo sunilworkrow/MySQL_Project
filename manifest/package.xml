@@ -30,5 +30,9 @@
         <members>mysql</members>
         <name>ContentAsset</name>
     </types>
+    <types>
+        <members>User.mySOQLPackage2G__Employee_Key__c</members>
+        <name>CustomField</name>
+    </types>
     <version>63.0</version>
 </Package>

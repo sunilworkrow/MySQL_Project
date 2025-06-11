@@ -1,5 +1,11 @@
 public with sharing class MySQLObjectListController {
     
+    public static String getUserkey(){
+        Id currentUserId = UserInfo.getUserId();
+        User currentUser = [SELECT Employee_Key__c FROM User WHERE Id = :currentUserId LIMIT 1];
+        return currentUser.Employee_Key__c;
+    }
+    
    @AuraEnabled(cacheable=true)
     public static List<WorkRowObject> fetchWorkRowObjects() {
         Http http = new Http();
@@ -9,6 +15,10 @@ public with sharing class MySQLObjectListController {
         request.setMethod('GET');
         request.setHeader('Content-Type', 'application/json');
         request.setHeader('Accept', 'application/json');
+        
+        if(getUserkey() != NULL){
+           request.setHeader('api-key',getUserkey());
+        }
         
         HttpResponse response = http.send(request);
         System.debug('HTTP Response Body: ' + response.getBody());
@@ -41,6 +51,10 @@ public with sharing class MySQLObjectListController {
         HttpRequest req = new HttpRequest();
         req.setEndpoint(endpointUrl);
         req.setMethod('POST');
+        
+        if(getUserkey() != NULL){
+           req.setHeader('api-key',getUserkey());
+        }
         
         Map<String, String> bodyMap = new Map<String, String>();
         bodyMap.put('object_name', objName);
@@ -82,6 +96,9 @@ public with sharing class MySQLObjectListController {
         HttpRequest req = new HttpRequest();
         req.setEndpoint(endpointUrl);
         req.setMethod('POST');
+        if(getUserkey() != NULL){
+           req.setHeader('api-key',getUserkey());
+        }
         
         Map<String, String> requestBody = new Map<String, String>();
         requestBody.put('object_name', objName);  
@@ -120,7 +137,6 @@ public with sharing class MySQLObjectListController {
         }
     }
     
-    
     @AuraEnabled
     public static List<WorkRowField> fetchWorkRowField(String objName) {
        Http http = new Http();
@@ -129,6 +145,10 @@ public with sharing class MySQLObjectListController {
         request.setMethod('GET');
         request.setHeader('Content-Type', 'application/json');
         request.setHeader('Accept', 'application/json');
+        
+        if(getUserkey() != NULL){
+           request.setHeader('api-key',getUserkey());
+        }
         
         HttpResponse response = http.send(request);
         System.debug('HTTP Response Body: ' + response.getBody());
@@ -205,6 +225,10 @@ public with sharing class MySQLObjectListController {
         request.setHeader('Content-Type', 'application/json');
         request.setHeader('Accept', 'application/json');
         
+        if(getUserkey() != NULL){
+           request.setHeader('api-key',getUserkey());
+        }
+        
         HttpResponse response = http.send(request);
         System.debug('HTTP Response Body: ' + response.getBody());
         if (response.getStatusCode() == 200) {
@@ -266,6 +290,41 @@ public with sharing class MySQLObjectListController {
                 return 'Error: Failed to parse error response. ' + e.getMessage();
             }
         } 
+    }
+    
+    @AuraEnabled
+    public static List<WorkRowUsers> fetchUserDetail() {
+        Http http = new Http();
+        HttpRequest request = new HttpRequest();
+        request.setEndpoint('https://api.workrow.io//wp-json/workrow/v1/get_users?timestamp=' + DateTime.now().getTime());
+
+        request.setMethod('GET');
+        request.setHeader('Content-Type', 'application/json');
+        request.setHeader('Accept', 'application/json');
+        
+        if(getUserkey() != NULL){
+           request.setHeader('api-key',getUserkey());
+        }
+        
+        HttpResponse response = http.send(request);
+        System.debug('HTTP Response Body: ' + response.getBody());
+        if (response.getStatusCode() == 200) {
+            usersResponse apiResponse = (usersResponse) JSON.deserialize(response.getBody(), usersResponse.class);
+            System.debug('usersResponseList'+apiResponse.data);
+            return apiResponse.data;
+        } else {
+            throw new AuraHandledException('Failed to fetch Users: ' + response.getBody());
+        }
+    }
+    public class usersResponse {
+        @AuraEnabled public String message { get; set; }
+        @AuraEnabled public List<WorkRowUsers> data { get; set; }
+    }
+    
+    public class WorkRowUsers {
+        @AuraEnabled public String id { get; set; }
+        @AuraEnabled public String email { get; set; }
+        @AuraEnabled public String name { get; set; }
     }
     
 }
