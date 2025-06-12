@@ -32,6 +32,7 @@
     </types>
     <types>
         <members>User.mySOQLPackage2G__Employee_Key__c</members>
+        <members>User.mySOQLPackage2G__mySQL_User_Id__c</members>
         <name>CustomField</name>
     </types>
     <version>63.0</version>

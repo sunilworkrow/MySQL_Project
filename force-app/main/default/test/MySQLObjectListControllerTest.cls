@@ -1,6 +1,5 @@
 @isTest
 public class MySQLObjectListControllerTest {
-
     public class MockHttpResponseGenerator implements HttpCalloutMock {
         private Integer statusCode;
         private String responseBody;
@@ -60,7 +59,7 @@ public class MySQLObjectListControllerTest {
 
         String labeledName = 'Test Label';
         String fieldName = 'TestLabel';
-        String fieldType = 'Integer';  // Corrected the typo
+        String fieldType = 'Integer';
         String objName = 'TestObject';
         String textLength = '255'; 
 

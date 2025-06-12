@@ -1,9 +1,10 @@
 public with sharing class MySQLObjectListController {
     
-    public static String getUserkey(){
+    public static User getUserRecords(){
         Id currentUserId = UserInfo.getUserId();
-        User currentUser = [SELECT Employee_Key__c FROM User WHERE Id = :currentUserId LIMIT 1];
-        return currentUser.Employee_Key__c;
+        User currentUser = [SELECT Employee_Key__c,mySQL_User_Id__c,Email FROM User WHERE Id = :currentUserId LIMIT 1];
+        return currentUser;
+        
     }
     
    @AuraEnabled(cacheable=true)
@@ -15,9 +16,11 @@ public with sharing class MySQLObjectListController {
         request.setMethod('GET');
         request.setHeader('Content-Type', 'application/json');
         request.setHeader('Accept', 'application/json');
-        
-        if(getUserkey() != NULL){
-           request.setHeader('api-key',getUserkey());
+        User userRecord= getUserRecords();
+        if(userRecord.Employee_Key__c != NULL){
+           request.setHeader('api-key',userRecord.Employee_Key__c);
+           request.setHeader('mysql-user',userRecord.mySQL_User_Id__c);
+           request.setHeader('mysql-email',userRecord.Email);
         }
         
         HttpResponse response = http.send(request);
@@ -51,9 +54,11 @@ public with sharing class MySQLObjectListController {
         HttpRequest req = new HttpRequest();
         req.setEndpoint(endpointUrl);
         req.setMethod('POST');
-        
-        if(getUserkey() != NULL){
-           req.setHeader('api-key',getUserkey());
+        User userRecord= getUserRecords();
+        if(userRecord.Employee_Key__c != NULL){
+           req.setHeader('api-key',userRecord.Employee_Key__c);
+           req.setHeader('mysql-user',userRecord.mySQL_User_Id__c);
+           req.setHeader('mysql-email',userRecord.Email);
         }
         
         Map<String, String> bodyMap = new Map<String, String>();
@@ -96,8 +101,11 @@ public with sharing class MySQLObjectListController {
         HttpRequest req = new HttpRequest();
         req.setEndpoint(endpointUrl);
         req.setMethod('POST');
-        if(getUserkey() != NULL){
-           req.setHeader('api-key',getUserkey());
+        User userRecord= getUserRecords();
+        if(userRecord.Employee_Key__c != NULL){
+           req.setHeader('api-key',userRecord.Employee_Key__c);
+           req.setHeader('mysql-user',userRecord.mySQL_User_Id__c);
+           req.setHeader('mysql-email',userRecord.Email);
         }
         
         Map<String, String> requestBody = new Map<String, String>();
@@ -145,9 +153,11 @@ public with sharing class MySQLObjectListController {
         request.setMethod('GET');
         request.setHeader('Content-Type', 'application/json');
         request.setHeader('Accept', 'application/json');
-        
-        if(getUserkey() != NULL){
-           request.setHeader('api-key',getUserkey());
+        User userRecord= getUserRecords();
+        if(userRecord.Employee_Key__c != NULL){
+           request.setHeader('api-key',userRecord.Employee_Key__c);
+           request.setHeader('mysql-user',userRecord.mySQL_User_Id__c);
+           request.setHeader('mysql-email',userRecord.Email);
         }
         
         HttpResponse response = http.send(request);
@@ -224,11 +234,12 @@ public with sharing class MySQLObjectListController {
         request.setMethod('GET');
         request.setHeader('Content-Type', 'application/json');
         request.setHeader('Accept', 'application/json');
-        
-        if(getUserkey() != NULL){
-           request.setHeader('api-key',getUserkey());
+        User userRecord= getUserRecords();
+        if(userRecord.Employee_Key__c != NULL){
+           request.setHeader('api-key',userRecord.Employee_Key__c);
+           request.setHeader('mysql-user',userRecord.mySQL_User_Id__c);
+           request.setHeader('mysql-email',userRecord.Email);
         }
-        
         HttpResponse response = http.send(request);
         System.debug('HTTP Response Body: ' + response.getBody());
         if (response.getStatusCode() == 200) {
@@ -301,11 +312,12 @@ public with sharing class MySQLObjectListController {
         request.setMethod('GET');
         request.setHeader('Content-Type', 'application/json');
         request.setHeader('Accept', 'application/json');
-        
-        if(getUserkey() != NULL){
-           request.setHeader('api-key',getUserkey());
-        }
-        
+        User userRecord= getUserRecords();
+        if(userRecord.Employee_Key__c != NULL){
+           request.setHeader('api-key',userRecord.Employee_Key__c);
+           request.setHeader('mysql-user',userRecord.mySQL_User_Id__c);
+           request.setHeader('mysql-email',userRecord.Email);
+        }        
         HttpResponse response = http.send(request);
         System.debug('HTTP Response Body: ' + response.getBody());
         if (response.getStatusCode() == 200) {

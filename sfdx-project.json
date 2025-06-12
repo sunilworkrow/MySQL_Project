@@ -5,13 +5,13 @@
       "default": true
     },
     {
-      "versionName": "ver 0.2",
-      "versionNumber": "0.2.0.NEXT",
+      "versionName": "ver 0.3",
+      "versionNumber": "0.3.0.NEXT",
       "path": "force-app/main/default",
       "default": false,
       "package": "MySQLManaged_Package_by_Workrow",
-      "versionDescription": "Updated MySQL Managed Package which includes the userKey",
-      "ancestorId": "04tgL0000002aSPQAY"
+      "versionDescription": "Updated MySQL Managed Package with latest code changes (version 0.3)",
+      "ancestorId": "04tgL0000002jnRQAQ"
     }
   ],
   "name": "workrow-MySQL-Project",
@@ -21,6 +21,7 @@
   "packageAliases": {
     "MySQLManaged_Package_by_Workrow": "0HogL0000000E4bSAE",
     "MySQLManaged_Package_by_Workrow@0.1.0-1": "04tgL0000002aSPQAY",
-    "MySQLManaged_Package_by_Workrow@0.2.0-1": "04tgL0000002jnRQAQ"
+    "MySQLManaged_Package_by_Workrow@0.2.0-1": "04tgL0000002jnRQAQ",
+    "MySQLManaged_Package_by_Workrow@0.3.0-1": "04tgL0000002n33QAA"
   }
 }
